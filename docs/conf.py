@@ -30,6 +30,10 @@ link_files = {
 
 # Be strict about any broken references
 nitpicky = True
+nitpick_ignore = [
+    # Sphinx can't find a class defined globally *shrug*
+    ('py:class', 'backports.tarfile.ExFileObject'),
+]
 
 # Include Python intersphinx mapping to prevent failures
 # jaraco/skeleton#51

@@ -1751,11 +1751,11 @@ class TarFile(object):
 
     @classmethod
     def open(cls, name=None, mode="r", fileobj=None, bufsize=RECORDSIZE, **kwargs):
-        """Open a tar archive for reading, writing or appending. Return
+        r"""Open a tar archive for reading, writing or appending. Return
            an appropriate TarFile class.
 
            mode:
-           'r' or 'r:*' open for reading with transparent compression
+           'r' or 'r:\*' open for reading with transparent compression
            'r:'         open for reading exclusively uncompressed
            'r:gz'       open for reading with gzip compression
            'r:bz2'      open for reading with bzip2 compression
@@ -1775,7 +1775,7 @@ class TarFile(object):
            'x:xz'       create an lzma compressed tarfile, raise an exception
                         if the file is already created
 
-           'r|*'        open a stream of tar blocks with transparent compression
+           'r|\*'        open a stream of tar blocks with transparent compression
            'r|'         open an uncompressed stream of tar blocks for reading
            'r|gz'       open a gzip compressed stream of tar blocks
            'r|bz2'      open a bzip2 compressed stream of tar blocks
@@ -1975,7 +1975,7 @@ class TarFile(object):
                 self.fileobj.close()
 
     def getmember(self, name):
-        """Return a TarInfo object for member `name'. If `name' can not be
+        """Return a TarInfo object for member ``name``. If ``name`` can not be
            found in the archive, KeyError is raised. If a member occurs more
            than once in the archive, its last occurrence is assumed to be the
            most up-to-date version.
@@ -2003,9 +2003,9 @@ class TarFile(object):
 
     def gettarinfo(self, name=None, arcname=None, fileobj=None):
         """Create a TarInfo object from the result of os.stat or equivalent
-           on an existing file. The file is either named by `name', or
-           specified as a file object `fileobj' with a file descriptor. If
-           given, `arcname' specifies an alternative name for the file in the
+           on an existing file. The file is either named by ``name``, or
+           specified as a file object ``fileobj`` with a file descriptor. If
+           given, ``arcname`` specifies an alternative name for the file in the
            archive, otherwise, the name is taken from the 'name' attribute of
            'fileobj', or the 'name' argument. The name should be a text
            string.
@@ -2101,9 +2101,9 @@ class TarFile(object):
         return tarinfo
 
     def list(self, verbose=True, *, members=None):
-        """Print a table of contents to sys.stdout. If `verbose' is False, only
+        """Print a table of contents to sys.stdout. If ``verbose`` is False, only
            the names of the members are printed. If it is True, an `ls -l'-like
-           output is produced. `members' is optional and must be a subset of the
+           output is produced. ``members`` is optional and must be a subset of the
            list returned by getmembers().
         """
         self._check()
@@ -2139,11 +2139,11 @@ class TarFile(object):
             print()
 
     def add(self, name, arcname=None, recursive=True, *, filter=None):
-        """Add the file `name' to the archive. `name' may be any type of file
-           (directory, fifo, symbolic link, etc.). If given, `arcname'
+        """Add the file ``name`` to the archive. ``name`` may be any type of file
+           (directory, fifo, symbolic link, etc.). If given, ``arcname``
            specifies an alternative name for the file in the archive.
            Directories are added recursively by default. This can be avoided by
-           setting `recursive' to False. `filter' is a function
+           setting ``recursive`` to False. ``filter`` is a function
            that expects a TarInfo object argument and returns the changed
            TarInfo object, if it returns None the TarInfo object will be
            excluded from the archive.
@@ -2190,7 +2190,7 @@ class TarFile(object):
             self.addfile(tarinfo)
 
     def addfile(self, tarinfo, fileobj=None):
-        """Add the TarInfo object `tarinfo' to the archive. If `fileobj' is
+        """Add the TarInfo object ``tarinfo`` to the archive. If ``fileobj`` is
            given, it should be a binary file, and tarinfo.size bytes are read
            from it and added to the archive. You can create TarInfo objects
            directly, or by using gettarinfo().
@@ -2357,10 +2357,10 @@ class TarFile(object):
             self._dbg(1, "tarfile: %s %s" % (type(e).__name__, e))
 
     def extractfile(self, member):
-        """Extract a member from the archive as a file object. `member' may be
-           a filename or a TarInfo object. If `member' is a regular file or
+        """Extract a member from the archive as a file object. ``member`` may be
+           a filename or a TarInfo object. If ``member`` is a regular file or
            a link, an io.BufferedReader object is returned. For all other
-           existing members, None is returned. If `member' does not appear
+           existing members, None is returned. If ``member`` does not appear
            in the archive, KeyError is raised.
         """
         self._check("r")
