@@ -19,7 +19,7 @@ from .compat.py310 import archiver_tests
 from .compat.py310 import support
 from .compat.py310 import os_helper
 from test.support import script_helper
-from test.support import warnings_helper
+from .compat.py38 import warnings_helper
 
 # Check for our compression modules.
 try:

@@ -3,7 +3,7 @@ Backward-compatability shims to support Python 3.9 and earlier.
 """
 
 import sys
-import test.support
+from .py38 import support as std_support
 import types
 
 from jaraco.test.cpython import from_test_support, try_import
@@ -25,7 +25,7 @@ class support_compat:
     if sys.version_info < (3, 10):
         def check__all__(test_case, mod, *, not_exported=(), **kwargs):
             kwargs.update(blacklist=not_exported)
-            return test.support.check__all__(test_case, mod, **kwargs)
+            return std_support.check__all__(test_case, mod, **kwargs)
 
 
-support = types.SimpleNamespace(**{**vars(test.support), **vars(support_compat)})
+support = types.SimpleNamespace(**{**vars(std_support), **vars(support_compat)})
