@@ -16,8 +16,8 @@ import unittest.mock
 import tarfile
 
 from .compat.py310 import archiver_tests
-from test import support
-from test.support import os_helper
+from .compat.py310 import support
+from .compat.py310 import os_helper
 from test.support import script_helper
 from test.support import warnings_helper
 
