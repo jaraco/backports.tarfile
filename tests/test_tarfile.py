@@ -4,7 +4,7 @@ import os
 import io
 from hashlib import sha256
 from contextlib import contextmanager, ExitStack
-from random import Random
+from .compat.py38 import Random
 import pathlib
 import shutil
 import re

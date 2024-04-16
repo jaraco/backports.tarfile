@@ -1,3 +1,4 @@
+import random
 import sys
 import test.support
 import types
@@ -41,3 +42,12 @@ class support_compat:
 
 
 support = types.SimpleNamespace(**{**vars(test.support), **vars(support_compat)})
+
+
+class RandomCompat(random.Random):
+    def randbytes(self, n):
+        """Generate n random bytes."""
+        return self.getrandbits(n * 8).to_bytes(n, 'little')
+
+
+Random = RandomCompat if sys.version_info < (3, 9) else random.Random
