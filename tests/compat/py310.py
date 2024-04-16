@@ -1,9 +1,10 @@
 import contextlib
 import sys
 import test.support
-import test.support.os_helper
+from .py39 import os_helper as std_os_helper
 import types
 import warnings as std_warnings
+
 
 
 try:
@@ -21,7 +22,7 @@ class os_helper_compat:
         return True
 
 
-os_helper = types.SimpleNamespace(**{**vars(os_helper_compat), **vars(test.support.os_helper)})
+os_helper = types.SimpleNamespace(**{**vars(os_helper_compat), **vars(std_os_helper)})
 
 
 class support_compat:
