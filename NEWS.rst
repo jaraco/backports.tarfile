@@ -1,3 +1,18 @@
+v1.1.0
+======
+
+Features
+--------
+
+- Backported tests from CPython. (#2)
+
+
+Bugfixes
+--------
+
+- Fixed a bug in _proc_gnulong on Python 3.8 where removesuffix was used.
+
+
 v1.0.0
 ======
 
