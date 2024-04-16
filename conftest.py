@@ -1,4 +1,5 @@
 import pathlib
+import sys
 from test import support
 
 import pytest
@@ -15,8 +16,17 @@ def patch_findfile():
     support.findfile = find_file
 
 
+def backport_as_std():
+    """
+    Make sure 'import tarfile' gets the backport.
+    """
+    from backports import tarfile
+    sys.modules['tarfile'] = tarfile
+
+
 def pytest_configure():
     patch_findfile()
+    backport_as_std()
 
 
 @pytest.fixture(scope='module', autouse=True)
