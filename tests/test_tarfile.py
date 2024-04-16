@@ -3229,8 +3229,8 @@ class NoneInfoTests_Misc(unittest.TestCase):
         for attr_names in ({'mtime'}, {'mode'}, {'uid'}, {'gid'},
                            {'uname'}, {'gname'},
                            {'uid', 'uname'}, {'gid', 'gname'}):
-            with (self.subTest(attr_names=attr_names),
-                  tarfile.open(tarname, encoding="iso8859-1") as tar):
+            with self.subTest(attr_names=attr_names), \
+                    tarfile.open(tarname, encoding="iso8859-1") as tar:
                 tio_prev = io.TextIOWrapper(io.BytesIO(), 'ascii', newline='\n')
                 with support.swap_attr(sys, 'stdout', tio_prev):
                     tar.list()
