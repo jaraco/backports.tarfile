@@ -8,7 +8,7 @@ from random import Random
 import pathlib
 import shutil
 import re
-import warnings
+from .compat.py310 import warnings
 import stat
 
 import unittest

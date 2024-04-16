@@ -1,6 +1,9 @@
+import contextlib
+import sys
 import test.support
 import test.support.os_helper
 import types
+import warnings as std_warnings
 
 
 try:
@@ -30,3 +33,15 @@ class support_compat:
 
 
 support = types.SimpleNamespace(**{**vars(support_compat), **vars(test.support)})
+
+
+class warnings_compat:
+    if sys.version_info < (3, 11):
+        @contextlib.contextmanager
+        def catch_warnings(*, record=False, module=None, action=None, **kwargs):
+            with std_warnings.catch_warnings(record=record, module=module) as val:
+                if action:
+                    std_warnings.simplefilter(action, **kwargs)
+                yield val
+
+warnings = types.SimpleNamespace(**{**vars(std_warnings), **vars(warnings_compat)})
