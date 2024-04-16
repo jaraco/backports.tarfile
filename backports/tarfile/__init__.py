@@ -48,6 +48,8 @@ import copy
 import re
 import warnings
 
+from .compat.py38 import removesuffix
+
 try:
     import pwd
 except ImportError:
@@ -1365,7 +1367,7 @@ class TarInfo(object):
         # Remove redundant slashes from directories. This is to be consistent
         # with frombuf().
         if next.isdir():
-            next.name = next.name.removesuffix("/")
+            next.name = removesuffix(next.name, "/")
 
         return next
 

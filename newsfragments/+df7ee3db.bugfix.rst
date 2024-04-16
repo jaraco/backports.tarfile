@@ -1,0 +1,1 @@
+Fixed a bug in _proc_gnulong on Python 3.8 where removesuffix was used.
