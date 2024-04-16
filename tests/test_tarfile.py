@@ -20,6 +20,7 @@ from .compat.py310 import support
 from .compat.py310 import os_helper
 from test.support import script_helper
 from .compat.py38 import warnings_helper
+from .compat.py38 import removesuffix
 
 # Check for our compression modules.
 try:
@@ -1085,7 +1086,7 @@ class LongnameTest:
                     os.rmdir(longdir.rstrip("/"))
             with tarfile.open(tmpname) as tar:
                 self.assertIsNotNone(tar.getmember(longdir))
-                self.assertIsNotNone(tar.getmember(longdir.removesuffix('/')))
+                self.assertIsNotNone(tar.getmember(removesuffix(longdir, '/')))
 
 class GNUReadTest(LongnameTest, ReadTest, unittest.TestCase):
 
