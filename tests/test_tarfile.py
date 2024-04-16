@@ -2559,12 +2559,12 @@ class MiscTest(unittest.TestCase):
 class CommandLineTest(unittest.TestCase):
 
     def tarfilecmd(self, *args, **kwargs):
-        rc, out, err = script_helper.assert_python_ok('-m', 'tarfile', *args,
+        rc, out, err = script_helper.assert_python_ok('-m', 'backports.tarfile', *args,
                                                       **kwargs)
         return out.replace(os.linesep.encode(), b'\n')
 
     def tarfilecmd_failure(self, *args):
-        return script_helper.assert_python_failure('-m', 'tarfile', *args)
+        return script_helper.assert_python_failure('-m', 'backports.tarfile', *args)
 
     def make_simple_tarfile(self, tar_name):
         files = [support.findfile('tokenize_tests.txt',
