@@ -3,7 +3,7 @@
 import os
 import sys
 
-from test.support import os_helper
+from .py39 import os_helper
 
 class OverwriteTests:
 

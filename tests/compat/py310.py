@@ -1,6 +1,6 @@
 import contextlib
 import sys
-import test.support
+from .py39 import support as std_support
 from .py39 import os_helper as std_os_helper
 import types
 import warnings as std_warnings
@@ -33,7 +33,7 @@ class support_compat:
         return False
 
 
-support = types.SimpleNamespace(**{**vars(support_compat), **vars(test.support)})
+support = types.SimpleNamespace(**{**vars(support_compat), **vars(std_support)})
 
 
 class warnings_compat:
