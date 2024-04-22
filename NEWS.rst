@@ -1,3 +1,12 @@
+v1.1.1
+======
+
+Bugfixes
+--------
+
+- Declare the backports namespace package. (#5)
+
+
 v1.1.0
 ======
 
