@@ -35,6 +35,8 @@ testing = [
 
 	# local
 	"jaraco.test",
+	# workaround for pytest-dev/pytest#12219
+	"pytest != 8.0.*",
 ]
 docs = [
 	# upstream

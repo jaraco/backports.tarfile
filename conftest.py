@@ -2,8 +2,6 @@ import pathlib
 import sys
 from test import support
 
-import pytest
-
 
 def find_file(name, subdir=None):
     return str(pathlib.Path(*filter(None, ('tests', subdir, name))).absolute())
@@ -27,12 +25,3 @@ def backport_as_std():
 def pytest_configure():
     patch_findfile()
     backport_as_std()
-
-
-@pytest.fixture(scope='module', autouse=True)
-def setup_and_teardown_module(request):
-    request.module.setUpModule()
-    try:
-        yield
-    finally:
-        request.module.tearDownModule()
