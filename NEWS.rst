@@ -1,3 +1,13 @@
+v1.2.0
+======
+
+Features
+--------
+
+- Remove shebang. (#4)
+- Synced with python/cpython@f912e5a2f6.
+
+
 v1.1.1
 ======
 
