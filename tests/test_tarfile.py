@@ -21,6 +21,7 @@ from .compat.py310 import os_helper
 from test.support import script_helper
 from .compat.py38 import warnings_helper
 from .compat.py38 import removesuffix
+from .compat.py38 import temp_tarfile_open
 
 # Check for our compression modules.
 try:
@@ -741,10 +742,7 @@ class MiscReadTestBase(CommonReadTest):
 
     def test_deprecation_if_no_filter_passed_to_extractall(self):
         DIR = pathlib.Path(TEMPDIR) / "extractall"
-        with (
-            os_helper.temp_dir(DIR),
-            tarfile.open(tarname, encoding="iso8859-1") as tar
-        ):
+        with temp_tarfile_open(DIR, tarname) as tar:
             directories = [t for t in tar if t.isdir()]
             with self.assertWarnsRegex(DeprecationWarning, "Use the filter argument") as cm:
                 tar.extractall(DIR, directories)
@@ -754,10 +752,7 @@ class MiscReadTestBase(CommonReadTest):
     def test_deprecation_if_no_filter_passed_to_extract(self):
         dirtype = "ustar/dirtype"
         DIR = pathlib.Path(TEMPDIR) / "extractall"
-        with (
-            os_helper.temp_dir(DIR),
-            tarfile.open(tarname, encoding="iso8859-1") as tar
-        ):
+        with temp_tarfile_open(DIR, tarname) as tar:
             tarinfo = tar.getmember(dirtype)
             with self.assertWarnsRegex(DeprecationWarning, "Use the filter argument") as cm:
                 tar.extract(tarinfo, path=DIR)

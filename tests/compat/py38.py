@@ -1,3 +1,4 @@
+import contextlib
 import random
 import sys
 import test.support
@@ -75,3 +76,20 @@ else:
     def removeprefix(self, prefix):
         return self.removeprefix(prefix)
 
+
+@contextlib.contextmanager
+def temp_tarfile_open(DIR, tarname):
+    """
+    Syntax compatibility for Python 3.8 for:
+
+    ```
+    with (
+        os_helper.temp_dir(DIR),
+        tarfile.open(tarname, encoding="iso8859-1") as tar
+    ):
+    ```
+    """
+    from .py310 import os_helper
+    import tarfile
+    with os_helper.temp_dir(DIR), tarfile.open(tarname, encoding="iso8859-1") as tar:
+        yield tar
