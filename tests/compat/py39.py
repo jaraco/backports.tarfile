@@ -22,8 +22,8 @@ os_helper = try_import('os_helper') or from_test_support(
 
 
 class FakePath:
-    """Simple implementation of the path protocol.
-    """
+    """Simple implementation of the path protocol."""
+
     def __init__(self, path):
         self.path = path
 
@@ -31,9 +31,11 @@ class FakePath:
         return f'<FakePath {self.path!r}>'
 
     def __fspath__(self):
-        if (isinstance(self.path, BaseException) or
-            isinstance(self.path, type) and
-                issubclass(self.path, BaseException)):
+        if (
+            isinstance(self.path, BaseException)
+            or isinstance(self.path, type)
+            and issubclass(self.path, BaseException)
+        ):
             raise self.path
         else:
             return self.path
@@ -44,6 +46,7 @@ os_helper.FakePath = getattr(os_helper, 'FakePath', FakePath)
 
 class support_compat:
     if sys.version_info < (3, 10):
+
         def check__all__(test_case, mod, *, not_exported=(), **kwargs):
             kwargs.update(blacklist=not_exported)
             return std_support.check__all__(test_case, mod, **kwargs)

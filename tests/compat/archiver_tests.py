@@ -5,8 +5,8 @@ import sys
 
 from .py39 import os_helper
 
-class OverwriteTests:
 
+class OverwriteTests:
     def setUp(self):
         os.makedirs(self.testdir)
         self.addCleanup(os_helper.rmtree, self.testdir)
@@ -20,7 +20,6 @@ class OverwriteTests:
 
     def extractall(self, ar):
         raise NotImplementedError
-
 
     def test_overwrite_file_as_file(self):
         target = os.path.join(self.testdir, 'test')
@@ -52,8 +51,9 @@ class OverwriteTests:
         target = os.path.join(self.testdir, 'test')
         os.mkdir(target)
         with self.open(self.ar_with_file) as ar:
-            with self.assertRaises(PermissionError if sys.platform == 'win32'
-                                   else IsADirectoryError):
+            with self.assertRaises(
+                PermissionError if sys.platform == 'win32' else IsADirectoryError
+            ):
                 self.extractall(ar)
         self.assertTrue(os.path.isdir(target))
 
@@ -71,8 +71,9 @@ class OverwriteTests:
         target = os.path.join(self.testdir, 'test')
         self.create_file(target, b'content')
         with self.open(self.ar_with_implicit_dir) as ar:
-            with self.assertRaises(FileNotFoundError if sys.platform == 'win32'
-                                   else NotADirectoryError):
+            with self.assertRaises(
+                FileNotFoundError if sys.platform == 'win32' else NotADirectoryError
+            ):
                 self.extractall(ar)
         self.assertTrue(os.path.isfile(target))
         with open(target, 'rb') as f:

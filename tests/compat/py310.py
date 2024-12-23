@@ -6,7 +6,6 @@ import types
 import warnings as std_warnings
 
 
-
 try:
     from test import archiver_tests
 except ImportError:
@@ -38,11 +37,13 @@ support = types.SimpleNamespace(**{**vars(support_compat), **vars(std_support)})
 
 class warnings_compat:
     if sys.version_info < (3, 11):
+
         @contextlib.contextmanager
         def catch_warnings(*, record=False, module=None, action=None, **kwargs):
             with std_warnings.catch_warnings(record=record, module=module) as val:
                 if action:
                     std_warnings.simplefilter(action, **kwargs)
                 yield val
+
 
 warnings = types.SimpleNamespace(**{**vars(std_warnings), **vars(warnings_compat)})

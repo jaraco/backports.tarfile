@@ -19,6 +19,7 @@ def backport_as_std():
     Make sure 'import tarfile' gets the backport.
     """
     from backports import tarfile
+
     sys.modules['tarfile'] = tarfile
 
 

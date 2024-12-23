@@ -13,6 +13,7 @@ warnings_helper = try_import('warnings_helper') or from_test_support('check_warn
 
 class support_compat:
     if sys.version_info < (3, 9):
+
         def requires_zlib(reason='requires zlib'):
             try:
                 import zlib
@@ -68,6 +69,7 @@ if sys.version_info < (3, 9):
             return self[len(prefix) :]
         else:
             return self[:]
+
 else:
 
     def removesuffix(self, suffix):
@@ -91,5 +93,6 @@ def temp_tarfile_open(DIR, tarname):
     """
     from .py310 import os_helper
     import tarfile
+
     with os_helper.temp_dir(DIR), tarfile.open(tarname, encoding="iso8859-1") as tar:
         yield tar
