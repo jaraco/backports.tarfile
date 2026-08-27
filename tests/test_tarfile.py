@@ -326,6 +326,7 @@ class ListTest(ReadTest, unittest.TestCase):
         with support.swap_attr(sys, 'stdout', tio):
             self.tar.list(verbose=True)
         out = tio.detach().getvalue()
+        filemode_type = re.escape(stat.filemode(0)[0].encode())
         # Make sure it prints files separated by one newline with 'ls -l'-like
         # accessories if verbose flag is being used
         # ...
@@ -337,11 +338,11 @@ class ListTest(ReadTest, unittest.TestCase):
         # Array of values to modify the regex below:
         #  ((file_type, file_permissions, file_length), ...)
         type_perm_lengths = (
-            (rb'\?', b'rw-r--r--', b'7011'),
+            (filemode_type, b'rw-r--r--', b'7011'),
             (b'-', b'rw-r--r--', b'7011'),
             (b'd', b'rwxr-xr-x', b'0'),
             (b'd', b'rwxr-xr-x', b'255'),
-            (rb'\?', b'rw-r--r--', b'0'),
+            (filemode_type, b'rw-r--r--', b'0'),
             (b'l', b'rwxrwxrwx', b'0'),
             (b'b', b'rw-rw----', b'3,0'),
             (b'c', b'rw-rw-rw-', b'1,3'),
@@ -4119,14 +4120,15 @@ class TestExtractionFilters(unittest.TestCase):
     def test_modes(self):
         # Test how file modes are extracted
         # (Note that the modes are ignored on platforms without working chmod)
+        filemode_type = stat.filemode(0)[0]
         with ArchiveMaker() as arc:
-            arc.add('all_bits', mode='?rwsrwsrwt')
-            arc.add('perm_bits', mode='?rwxrwxrwx')
-            arc.add('exec_group_other', mode='?rw-rwxrwx')
-            arc.add('read_group_only', mode='?---r-----')
-            arc.add('no_bits', mode='?---------')
-            arc.add('dir/', mode='?---rwsrwt')
-            arc.add('dir_all_bits/', mode='?rwsrwsrwt')
+            arc.add('all_bits', mode=f'{filemode_type}rwsrwsrwt')
+            arc.add('perm_bits', mode=f'{filemode_type}rwxrwxrwx')
+            arc.add('exec_group_other', mode=f'{filemode_type}rw-rwxrwx')
+            arc.add('read_group_only', mode=f'{filemode_type}---r-----')
+            arc.add('no_bits', mode=f'{filemode_type}---------')
+            arc.add('dir/', mode=f'{filemode_type}---rwsrwt')
+            arc.add('dir_all_bits/', mode=f'{filemode_type}rwsrwsrwt')
 
         # On some systems, setting the uid, gid, and/or sticky bit is a no-ops.
         # Check which bits we can set, so we can compare tarfile machinery to
@@ -4174,33 +4176,35 @@ class TestExtractionFilters(unittest.TestCase):
 
         with self.check_context(arc.open(), 'fully_trusted'):
             self.expect_file(
-                'all_bits', mode=f'?rw{_suid_file}rw{_sgid_file}rw{_t_file}'
+                'all_bits',
+                mode=f'{filemode_type}rw{_suid_file}rw{_sgid_file}rw{_t_file}',
             )
-            self.expect_file('perm_bits', mode='?rwxrwxrwx')
-            self.expect_file('exec_group_other', mode='?rw-rwxrwx')
-            self.expect_file('read_group_only', mode='?---r-----')
-            self.expect_file('no_bits', mode='?---------')
-            self.expect_file('dir/', mode=f'?---rw{_sgid_dir}rw{_t_dir}')
+            self.expect_file('perm_bits', mode=f'{filemode_type}rwxrwxrwx')
+            self.expect_file('exec_group_other', mode=f'{filemode_type}rw-rwxrwx')
+            self.expect_file('read_group_only', mode=f'{filemode_type}---r-----')
+            self.expect_file('no_bits', mode=f'{filemode_type}---------')
+            self.expect_file('dir/', mode=f'{filemode_type}---rw{_sgid_dir}rw{_t_dir}')
             self.expect_file(
-                'dir_all_bits/', mode=f'?rw{_suid_dir}rw{_sgid_dir}rw{_t_dir}'
+                'dir_all_bits/',
+                mode=f'{filemode_type}rw{_suid_dir}rw{_sgid_dir}rw{_t_dir}',
             )
 
         with self.check_context(arc.open(), 'tar'):
-            self.expect_file('all_bits', mode='?rwxr-xr-x')
-            self.expect_file('perm_bits', mode='?rwxr-xr-x')
-            self.expect_file('exec_group_other', mode='?rw-r-xr-x')
-            self.expect_file('read_group_only', mode='?---r-----')
-            self.expect_file('no_bits', mode='?---------')
-            self.expect_file('dir/', mode='?---r-xr-x')
-            self.expect_file('dir_all_bits/', mode='?rwxr-xr-x')
+            self.expect_file('all_bits', mode=f'{filemode_type}rwxr-xr-x')
+            self.expect_file('perm_bits', mode=f'{filemode_type}rwxr-xr-x')
+            self.expect_file('exec_group_other', mode=f'{filemode_type}rw-r-xr-x')
+            self.expect_file('read_group_only', mode=f'{filemode_type}---r-----')
+            self.expect_file('no_bits', mode=f'{filemode_type}---------')
+            self.expect_file('dir/', mode=f'{filemode_type}---r-xr-x')
+            self.expect_file('dir_all_bits/', mode=f'{filemode_type}rwxr-xr-x')
 
         with self.check_context(arc.open(), 'data'):
             normal_dir_mode = stat.filemode(stat.S_IMODE(self.outerdir.stat().st_mode))
-            self.expect_file('all_bits', mode='?rwxr-xr-x')
-            self.expect_file('perm_bits', mode='?rwxr-xr-x')
-            self.expect_file('exec_group_other', mode='?rw-r--r--')
-            self.expect_file('read_group_only', mode='?rw-r-----')
-            self.expect_file('no_bits', mode='?rw-------')
+            self.expect_file('all_bits', mode=f'{filemode_type}rwxr-xr-x')
+            self.expect_file('perm_bits', mode=f'{filemode_type}rwxr-xr-x')
+            self.expect_file('exec_group_other', mode=f'{filemode_type}rw-r--r--')
+            self.expect_file('read_group_only', mode=f'{filemode_type}rw-r-----')
+            self.expect_file('no_bits', mode=f'{filemode_type}rw-------')
             self.expect_file('dir/', mode=normal_dir_mode)
             self.expect_file('dir_all_bits/', mode=normal_dir_mode)
 
